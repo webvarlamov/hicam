@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+
+  hicam_db:
+    image: postgres
+    restart: always
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_PASSWORD: hicam
+      POSTGRES_DB: hicam
+      POSTGRES_USER: hicam
+      POSTGRESS_ROLE: hicam
+
