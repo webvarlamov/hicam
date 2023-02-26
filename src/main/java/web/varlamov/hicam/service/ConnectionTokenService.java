@@ -6,6 +6,7 @@ import web.varlamov.hicam.entity.UserDetailsImpl;
 @Service
 public class ConnectionTokenService {
   public String getConnectionTokenAsLinkFor(UserDetailsImpl userDetails) {
-    return "http://localhost:8080/connect/" + userDetails.getUsername();
+    String token = userDetails.getUsername();
+    return "http://localhost:8080/connect/" + token;
   }
 }

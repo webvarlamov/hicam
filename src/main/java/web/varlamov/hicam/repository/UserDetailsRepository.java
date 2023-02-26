@@ -7,5 +7,5 @@ import web.varlamov.hicam.entity.UserDetailsImpl;
 
 @Repository
 public interface UserDetailsRepository extends CrudRepository<UserDetailsImpl, String> {
-  UserDetails findByUsername(String username);
+  UserDetailsImpl findByUsername(String username);
 }

@@ -1,0 +1,37 @@
+<div class="modal-window-header fd-shellbar" #header (dblclick)="onSetDefault()">
+  <h3 [title]="headerTitle">{{headerTitle}}</h3>
+  <div class="spacer"></div>
+  <div class="modal-window-header-action-bar">
+    <div class="fd-shellbar__action fd-shellbar__action--desktop">
+      <ng-container *ngIf="allowMinimize">
+        <button class="fd-button fd-shellbar__button" (click)="onMinimizeClick()" *ngIf="!minimize" title="Свернуть">
+          <i class="sap-icon--minimize"></i>
+        </button>
+        <button class="fd-button fd-shellbar__button" (click)="onNormalSizeButtonClick()" *ngIf="minimize" title="Оконный режим">
+          <i class="sap-icon--value-help"></i>
+        </button>
+      </ng-container>
+    </div>
+    <div class="fd-shellbar__action fd-shellbar__action--desktop">
+      <ng-container *ngIf="allowFullSize">
+        <button class="fd-button fd-shellbar__button" (click)="onFullSizeButtonClick()" *ngIf="!fullSize" title="Во весь экран">
+          <i class="sap-icon--header"></i>
+        </button>
+        <button class="fd-button fd-shellbar__button" (click)="onNormalSizeButtonClick()" *ngIf="fullSize" title="Оконный режим">
+          <i class="sap-icon--value-help"></i>
+        </button>
+      </ng-container>
+    </div>
+    <div class="fd-shellbar__action fd-shellbar__action--desktop">
+      <button class="fd-button fd-shellbar__button" (click)="decline.emit()" title="Закрыть">
+        <i class="sap-icon--decline"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="modal-window-body" [ngClass]="{'hidden': minimize}">
+  <ng-content select="[modalWindowBody]"></ng-content>
+</div>
+<div class="modal-window-footer" [ngClass]="{'hidden': minimize}" #footer>
+  <span class="sap-icon sap-icon--overflow"></span>
+</div>

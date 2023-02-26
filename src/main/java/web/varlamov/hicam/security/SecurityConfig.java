@@ -54,13 +54,13 @@ public class SecurityConfig {
       auth.requestMatchers("/").permitAll();
       auth.requestMatchers("/connect/**").authenticated();
       auth.requestMatchers("/private/device/**", "/private/admin/**").authenticated();
-      auth.requestMatchers("/admin","/admin_api/**").authenticated();
-      auth.requestMatchers("/device","/device_api/**").authenticated();
+      auth.requestMatchers("/admin","/admin_api/**", "connection_token").authenticated();
+      auth.requestMatchers("/device","/device/**","/device_api/**").authenticated();
+      auth.requestMatchers("/command-socket").authenticated();
     });
 
     httpSecurity
-        .httpBasic()
-        .disable();
+        .httpBasic();
 
     httpSecurity.formLogin();
 
