@@ -56,6 +56,7 @@ public class SecurityConfig {
       auth.requestMatchers("/private/device/**", "/private/admin/**").authenticated();
       auth.requestMatchers("/admin","/admin_api/**", "connection_token").authenticated();
       auth.requestMatchers("/device","/device/**","/device_api/**").authenticated();
+      auth.requestMatchers("/handshake_api/**").authenticated();
       auth.requestMatchers("/command-socket").authenticated();
     });
 

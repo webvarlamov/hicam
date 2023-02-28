@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/device")
 public class DevicePageController {
   @GetMapping
-  @RequestMapping("/{device_connection_id}")
-  public String get(@PathVariable String device_connection_id) {
+  public String get() {
     return "device";
   }
 }

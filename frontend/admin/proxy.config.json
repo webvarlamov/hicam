@@ -1,0 +1,21 @@
+{
+  "/": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": false,
+    "headers": {
+      "Authorization": "Basic VXNlcm5hbWU6cGFzc3dvcmQ="
+    }
+  },
+  "/command-socket": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": false,
+    "ws": true,
+    "headers": {
+      "Authorization": "Basic VXNlcm5hbWU6cGFzc3dvcmQ="
+    }
+  }
+}

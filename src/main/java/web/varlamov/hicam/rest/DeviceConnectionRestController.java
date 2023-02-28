@@ -34,19 +34,17 @@ public class DeviceConnectionRestController {
 
   @PostMapping("/transfer_offer/{device_connection_id}")
   public void transferOffer(@RequestBody String offer, @PathVariable(name = "device_connection_id") String deviceConnectionId, Principal principal) {
-    UserDetailsImpl userDetails = userDetailsRepository.findByUsername(principal.getName());
-    List<WebSocketSession> webSocketSessions = webSocketSessionHolderService.getAdminWebSocketSessions(userDetails.getId());
-
-    if (webSocketSessions != null) {
-      webSocketSessions.forEach(session -> {
-        try {
-          session.sendMessage(new TextMessage(offer));
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      });
-    }
-
-    logger.info("Transfer RTCConnectionOffer for user: " + userDetails.getUsername());
+//    UserDetailsImpl userDetails = userDetailsRepository.findByUsername(principal.getName());
+//    List<WebSocketSession> adminWebSocketSessions = webSocketSessionHolderService.getAdminWebSocketSessions(userDetails.getId());
+//
+//    if (adminWebSocketSessions != null) {
+//      adminWebSocketSessions.forEach(session -> {
+//        try {
+//          session.sendMessage(new TextMessage(offer));
+//        } catch (IOException e) {
+//          e.printStackTrace();
+//        }
+//      });
+//    }
   }
 }

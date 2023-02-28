@@ -2,9 +2,9 @@
 <div class="fd-grid-list fd-grid-list--mode-delete">
   <div class="fd-container">
     <div class="fd-row">
-      <ng-container *ngFor="let deviceConnectionCardData of deviceConnectionListCardsData$ | async">
+      <ng-container *ngFor="let item of (peerConnectionsStoreService.connectionsMap | async) | keyvalue">
         <div  class="fd-col fd-col--12 fd-col-md--6 fd-col-lg--4 fd-col-xl--3">
-            <app-device-connection-card></app-device-connection-card>
+            <app-device-connection-card [rtcPeerConnection]="item.value"></app-device-connection-card>
         </div>
       </ng-container>
     </div>

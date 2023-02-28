@@ -11,26 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import web.varlamov.hicam.entity.DeviceConnection;
 import web.varlamov.hicam.entity.UserDetailsImpl;
-import web.varlamov.hicam.repository.DeviceConnectionRepository;
+//import web.varlamov.hicam.repository.DeviceConnectionRepository;
 import web.varlamov.hicam.repository.UserDetailsRepository;
-import web.varlamov.hicam.utils.HttpUtils;
 
 @RestController
 @RequestMapping("/connect")
 public class ConnectionRestController {
   @Autowired
   UserDetailsRepository userDetailsRepository;
-  @Autowired
-  DeviceConnectionRepository deviceConnectionRepository;
+//  @Autowired
+//  DeviceConnectionRepository deviceConnectionRepository;
 
   @GetMapping("/{token}")
-  public void connect(@PathVariable String token, HttpServletResponse httpServletResponse, HttpServletRequest request, Authentication authentication) {
-    String username = (String) authentication.getPrincipal();
-    UserDetailsImpl userDetails = userDetailsRepository.findByUsername(username);
-    DeviceConnection deviceConnection = new DeviceConnection(LocalDateTime.now(), userDetails);
-    deviceConnectionRepository.save(deviceConnection);
-
-    httpServletResponse.setHeader("Location", "/device/" + deviceConnection.getId());
+  public void connect(HttpServletResponse httpServletResponse, HttpServletRequest request) {
+    httpServletResponse.setHeader("Location", "/device");
     httpServletResponse.setStatus(302);
   }
 }

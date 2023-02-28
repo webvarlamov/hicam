@@ -18,15 +18,15 @@ public class DeviceConnectionHandleInterceptor implements HandlerInterceptor {
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    String deviceConnectionId = HttpUtils.getDeviceConnectionId(request);
-
-    if (deviceConnectionId == null) {
-      deviceConnectionId = UUID.randomUUID().toString();
-      logger.info("Generate new deviceConnectionId: " + deviceConnectionId);
-      response.addCookie(new Cookie(DEVICE_CONNECTION_ID, deviceConnectionId));
-    } else {
-      logger.info("Cookie deviceConnectionId is : " + deviceConnectionId);
-    }
+//    String deviceConnectionId = HttpUtils.getDeviceConnectionId(request);
+//
+//    if (deviceConnectionId == null) {
+//      deviceConnectionId = UUID.randomUUID().toString();
+//      logger.info("Generate new deviceConnectionId: " + deviceConnectionId);
+//      response.addCookie(new Cookie(DEVICE_CONNECTION_ID, deviceConnectionId));
+//    } else {
+//      logger.info("Cookie deviceConnectionId is : " + deviceConnectionId);
+//    }
 
     return true;
   }
