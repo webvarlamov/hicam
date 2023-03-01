@@ -1,11 +1,23 @@
 package web.varlamov.hicam.websocket;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class CommandSocketTextMessage {
-  CommandSocketMessageType type;
-  String data;
+  private String id;
+  private CommandSocketTextMessageMission mission;
+  private CommandSocketTextMessagePurpose purpose;
+  private String from;
+  private String to;
+  private String data;
+
+  public static enum CommandSocketTextMessageMission {
+    PASS_RTC_PEER_CONNECTION_COMMAND,
+    PASS_RTC_SESSION_DESCRIPTION__SUCCESS,
+  }
+
+  public static enum CommandSocketTextMessagePurpose {
+    ACCEPT_OFFER,
+    ACCEPT_OFFER__SUCCESS,
+  }
 }

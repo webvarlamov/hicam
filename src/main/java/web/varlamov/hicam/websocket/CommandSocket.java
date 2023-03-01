@@ -1,11 +1,7 @@
 package web.varlamov.hicam.websocket;
 
 import com.google.gson.Gson;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +11,13 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import web.varlamov.hicam.entity.DeviceConnectionType;
+import web.varlamov.hicam.entity.DeviceType;
 import web.varlamov.hicam.entity.UserDetailsImpl;
 import web.varlamov.hicam.interceptor.DeviceConnectionHandleInterceptor;
 import web.varlamov.hicam.repository.UserDetailsRepository;
 import web.varlamov.hicam.utils.HttpUtils;
 import web.varlamov.hicam.websocket.handler.AddAnswerHandler;
-import web.varlamov.hicam.websocket.handler.AddOfferHandler;
+import web.varlamov.hicam.websocket.handler.PassRtcPeerConnectionCommand;
 
 @Component
 public class CommandSocket extends TextWebSocketHandler {
@@ -33,7 +29,7 @@ public class CommandSocket extends TextWebSocketHandler {
   @Autowired
   UserDetailsRepository userDetailsRepository;
   @Autowired
-  AddOfferHandler addOfferHandler;
+  PassRtcPeerConnectionCommand passRtcPeerConnectionCommand;
   @Autowired
   AddAnswerHandler addAnswerHandler;
 
@@ -42,9 +38,8 @@ public class CommandSocket extends TextWebSocketHandler {
     String rawMessage = message.getPayload();
     CommandSocketTextMessage parsedMessage = gson.fromJson(rawMessage, CommandSocketTextMessage.class);
 
-    switch (parsedMessage.type) {
-      case ADD_OFFER -> addOfferHandler.handleTextMessage(rawMessage, parsedMessage, session);
-      case ADD_ANSWER -> addAnswerHandler.handleTextMessage(rawMessage, parsedMessage, session);
+    switch (parsedMessage.getMission()) {
+      case PASS_RTC_PEER_CONNECTION_COMMAND -> passRtcPeerConnectionCommand.handleTextMessage(rawMessage, parsedMessage, session);
     }
 
     logger.info("Handle new message: " + message);
@@ -59,25 +54,14 @@ public class CommandSocket extends TextWebSocketHandler {
     UserDetailsImpl userDetails = userDetailsRepository.findByUsername(username);
 
     assert session.getUri() != null;
-    List<NameValuePair> parse = URLEncodedUtils.parse(session.getUri(), StandardCharsets.UTF_8);
 
-    String deviceConnectionType = HttpUtils.getDeviceConnectionType(session.getUri());
-    String deviceConnectionId = HttpUtils.getDeviceConnectionId(session.getUri());
+    String deviceType = HttpUtils.getDeviceType(session.getUri());
+    String deviceId = HttpUtils.getDeviceId(session.getUri());
+    String deviceSessionId = HttpUtils.getDeviceSessionId(session.getUri());
 
-    WebSocketSessionWrapper webSocketSessionWrapper = new WebSocketSessionWrapper(deviceConnectionId, DeviceConnectionType.valueOf(deviceConnectionType), session);
+    WebSocketSessionWrapper webSocketSessionWrapper = new WebSocketSessionWrapper(deviceId, deviceSessionId, DeviceType.valueOf(deviceType), session);
 
-    List<WebSocketSessionWrapper> webSocketSessions = webSocketSessionHolderService
-        .commandSocketSessionMap.get(userDetails.getId());
-
-    if (webSocketSessions == null) {
-      webSocketSessions = new CopyOnWriteArrayList<>();
-      webSocketSessions.add(webSocketSessionWrapper);
-      webSocketSessionHolderService.commandSocketSessionMap.put(userDetails.getId(), webSocketSessions);
-    } else {
-      webSocketSessions.add(0, webSocketSessionWrapper);
-    }
-
-    logger.info("   User with id: " + userDetails.getId() + " has sessions connect WebSocket ");
+    this.webSocketSessionHolderService.add(webSocketSessionWrapper, userDetails.getId());
   }
 
   @Override

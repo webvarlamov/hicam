@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import web.varlamov.hicam.interceptor.DeviceConnectionHandleInterceptor;
 import web.varlamov.hicam.utils.HttpUtils;
-import static web.varlamov.hicam.utils.HttpUtils.DEVICE_CONNECTION_ID;
+import static web.varlamov.hicam.utils.HttpUtils.DEVICE_ID;
+import static web.varlamov.hicam.utils.HttpUtils.DEVICE_SESSION_ID;
 
 @RestController()
 @RequestMapping("/handshake_api")
@@ -19,16 +20,23 @@ public class HandshakeRestController {
 
   @RequestMapping("/get_device_id")
   public String getDeviceId(HttpServletRequest request, HttpServletResponse response) {
-    String deviceConnectionId = HttpUtils.getDeviceConnectionId(request);
+    String deviceId = HttpUtils.getDeviceId(request);
 
-    if (deviceConnectionId == null) {
-      deviceConnectionId = UUID.randomUUID().toString();
-      logger.info("Generate new deviceConnectionId: " + deviceConnectionId);
-      response.addCookie(new Cookie(DEVICE_CONNECTION_ID, deviceConnectionId));
+    if (deviceId == null) {
+      deviceId = UUID.randomUUID().toString();
+      logger.info("Generate new deviceConnectionId: " + deviceId);
+      response.addCookie(new Cookie(DEVICE_ID, deviceId));
     } else {
-      logger.info("Cookie deviceConnectionId is : " + deviceConnectionId);
+      logger.info("Cookie deviceConnectionId is : " + deviceId);
     }
 
-    return deviceConnectionId;
+    return deviceId;
+  }
+
+  @RequestMapping("/get_device_session_id")
+  public String getDeviceSessionId(HttpServletRequest request, HttpServletResponse response) {
+    String deviceSessionId = UUID.randomUUID().toString();
+    response.addCookie(new Cookie(DEVICE_SESSION_ID, deviceSessionId));
+    return deviceSessionId;
   }
 }

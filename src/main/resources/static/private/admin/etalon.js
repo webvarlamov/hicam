@@ -39,24 +39,3 @@ navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(stream => 
         })
     })
 })
-
-//=======================
-
-const localId = "localId"
-const remoteId = "remoteId"
-const commandSocket = new WebSocket("ws://localhost:8080/command-socket?deviceConnectionType=REMOTE&deviceConnectionId=" + localId);
-const config = {};
-
-async function connect(remoteId, localId, stream) {
-    const peerConnection = new RTCPeerConnection(config);
-    stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-
-    peerConnection.createOffer(offerOptions).then(offer => {
-        peerConnection.setLocalDescription(offer).then(_void => {
-
-        })
-    })
-
-}
-
-await connect(remoteId, localId,);

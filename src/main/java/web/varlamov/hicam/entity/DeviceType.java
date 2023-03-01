@@ -1,6 +1,6 @@
 package web.varlamov.hicam.entity;
 
-public enum DeviceConnectionType {
+public enum DeviceType {
   ADMIN,
   REMOTE
 }

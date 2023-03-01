@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import web.varlamov.hicam.entity.DeviceConnectionType;
+import web.varlamov.hicam.entity.DeviceType;
 import web.varlamov.hicam.websocket.callback.WebRtcHolderCallback;
 
 @Service
@@ -13,8 +13,8 @@ public class WebRtcOfferHolderService {
   @Autowired
   public List<WebRtcHolderCallback> webRtcHolderCallbackList;
 
-  public void addWebRtcOffer(String offer, String deviceConnectionId, String userId, DeviceConnectionType deviceConnectionType) {
-    WebRtcOfferWrapper webRtcOfferWrapper = new WebRtcOfferWrapper(offer, deviceConnectionId, deviceConnectionType);
+  public void addWebRtcOffer(String offer, String deviceConnectionId, String userId, DeviceType deviceType) {
+    WebRtcOfferWrapper webRtcOfferWrapper = new WebRtcOfferWrapper(offer, deviceConnectionId, deviceType);
     String key = userId + ":" + deviceConnectionId;
     deviceWebRtcOfferMap.put(key, webRtcOfferWrapper);
 

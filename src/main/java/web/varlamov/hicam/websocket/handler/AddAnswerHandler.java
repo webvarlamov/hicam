@@ -40,7 +40,7 @@ public class AddAnswerHandler implements CommandSocketTextMessageHandler {
 
     Optional<WebSocketSessionWrapper> destinationDevice = deviceWebSocketSessionWrappers.stream()
         .filter(webSocketSessionWrapper -> payload.getDestinationDeviceConnectionId()
-            .equals(webSocketSessionWrapper.getDeviceConnectionId()))
+            .equals(webSocketSessionWrapper.getDeviceId()))
         .findFirst();
 
     if (destinationDevice.isPresent()) {

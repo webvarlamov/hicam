@@ -12,18 +12,19 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.web.socket.WebSocketSession;
 
 public class HttpUtils {
-  public final static String DEVICE_CONNECTION_ID = "device_connection_id";
+  public final static String DEVICE_ID = "device_id";
+  public final static String DEVICE_SESSION_ID = "device_session_id";
 
-  public static String getDeviceConnectionId(HttpServletRequest request) {
+  public static String getDeviceId(HttpServletRequest request) {
     return Arrays.stream(
             Optional.ofNullable(request.getCookies()).orElse(new Cookie[0])
-        ).filter(cookie -> DEVICE_CONNECTION_ID.equals(cookie.getName()))
+        ).filter(cookie -> DEVICE_ID.equals(cookie.getName()))
         .findFirst()
         .map(Cookie::getValue)
         .orElse(null);
   }
 
-  public static String getDeviceConnectionId(WebSocketSession session) {
+  public static String getDeviceId(WebSocketSession session) {
     return Optional.ofNullable(session.getHandshakeHeaders().get("cookie"))
         .map(headerValues -> headerValues.size() > 0 ? headerValues.get(0) : null)
         .flatMap(value -> Arrays
@@ -31,33 +32,39 @@ public class HttpUtils {
             .map(pairString -> {
               String[] split = pairString.split("=");
               return new Cookie(split[0], split[1]);
-            }).filter(cookie -> HttpUtils.DEVICE_CONNECTION_ID.equals(cookie.getName()))
+            }).filter(cookie -> HttpUtils.DEVICE_ID.equals(cookie.getName()))
             .findFirst()
         ).map(Cookie::getValue)
         .orElse(null);
   }
 
-  public static String getDeviceConnectionType(URI uri) {
+  public static String getDeviceType(URI uri) {
     List<NameValuePair> parse = URLEncodedUtils.parse(uri, StandardCharsets.UTF_8);
-    String deviceConnectionType = parse.stream()
-        .filter(pair -> "deviceConnectionType".equals(pair.getName()))
+    String deviceType = parse.stream()
+        .filter(pair -> "deviceType".equals(pair.getName()))
         .findFirst()
         .map(NameValuePair::getValue)
         .orElse(null);
-    return deviceConnectionType;
+    return deviceType;
   }
 
-  public static String getDeviceConnectionId(URI uri) {
+  public static String getDeviceId(URI uri) {
     List<NameValuePair> parse = URLEncodedUtils.parse(uri, StandardCharsets.UTF_8);
-    String deviceConnectionId = parse.stream()
-        .filter(pair -> "deviceConnectionId".equals(pair.getName()))
+    String deviceId = parse.stream()
+        .filter(pair -> "deviceId".equals(pair.getName()))
         .findFirst()
         .map(NameValuePair::getValue)
         .orElse(null);
-    return deviceConnectionId;
+    return deviceId;
   }
 
-
-
-
+  public static String getDeviceSessionId(URI uri) {
+    List<NameValuePair> parse = URLEncodedUtils.parse(uri, StandardCharsets.UTF_8);
+    String deviceSessionId = parse.stream()
+        .filter(pair -> "deviceSessionId".equals(pair.getName()))
+        .findFirst()
+        .map(NameValuePair::getValue)
+        .orElse(null);
+    return deviceSessionId;
+  }
 }
