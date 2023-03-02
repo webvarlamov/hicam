@@ -1,31 +1,38 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {combineLatest, firstValueFrom, Observable, of, switchMap} from "rxjs";
 import {CommandSocketClientService} from "./service/command-socket-client.service";
 import {DeviceSession} from "./model/device-session";
 import {tap} from "rxjs/operators";
 import {WebRtcService} from "./service/web-rtc.service";
 import {HttpClientService} from "./service/http-client.service";
+import {DeviceSessionStoreService} from "./store/device-session-store.service";
+import {DeviceSessionService} from "./service/device-session.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  public deviceConnectionListCardsData$: Observable<{ rtcPeerConnection: RTCPeerConnection, deviceConnection: DeviceSession }[]>
+export class AppComponent implements AfterViewInit {
+  public deviceSessionList$: Observable<DeviceSession[]>;
   public showUserInfo: boolean;
-  @ViewChild('video', {static: true})
-  public video: ElementRef<HTMLVideoElement> | null = null;
 
   constructor(
+    public deviceSessionStoreService: DeviceSessionStoreService,
+    public deviceSessionService: DeviceSessionService,
     public commandSocketClientService: CommandSocketClientService,
     public httpClientService: HttpClientService,
-    public webRtcService: WebRtcService
+    public webRtcService: WebRtcService,
   ) {
+    this.deviceSessionList$ = deviceSessionStoreService.deviceSessionList$
   }
 
-  ngOnInit(): void {
-    const init$ = combineLatest([
+  ngAfterViewInit(): void {
+    firstValueFrom(this.getInit$()).then();
+  }
+
+  public getInit$(): Observable<any> {
+    return combineLatest([
       this.httpClientService.getDeviceId(),
       this.httpClientService.getDeviceSessionId(),
     ]).pipe(
@@ -43,6 +50,7 @@ export class AppComponent implements OnInit {
         console.info("Remote device sessions received: ", deviceSessions)
       }),
       tap(([deviceSessionId, deviceSessions]) => {
+        this.deviceSessionStoreService.setDeviceSessions(deviceSessions);
         deviceSessions.forEach(deviceSession => {
           this.webRtcService.connect(
             deviceSession.deviceSessionId,
@@ -50,7 +58,7 @@ export class AppComponent implements OnInit {
             null,
             {
               ontrack: (event) => {
-                this.video.nativeElement.srcObject = event.streams[0];
+                (document.getElementById(deviceSession.deviceSessionId) as HTMLVideoElement).srcObject = event.streams[0];
               }
             }
           ).then(rtcPeerConnection => {
@@ -59,11 +67,14 @@ export class AppComponent implements OnInit {
         })
       })
     );
-
-    firstValueFrom(init$).then()
   }
 
   onUserInfoDecline() {
     this.showUserInfo = false;
   }
+
+  public trackByIdValue(index: number, item: DeviceSession) {
+    return item.deviceSessionId
+  };
+
 }

@@ -1,5 +1,26 @@
 <app-header (click)="showUserInfo = true"></app-header>
-<video #video autoplay="autoplay" playsinline controls="false"></video>
+
+<div class="fd-grid-list fd-grid-list--mode-delete">
+  <div class="fd-container">
+    <div class="fd-row">
+      <div class="fd-col fd-col--12">
+        <div class="fd-toolbar fd-toolbar--solid">
+          <span>Device connections</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fd-row">
+      <ng-container *ngFor="let deviceSession of deviceSessionList$ | async;  let i = index; trackBy: trackByIdValue;">
+        <div  class="fd-col fd-col--12 fd-col-md--6 fd-col-lg--4 fd-col-xl--3">
+          <app-device-session-card [deviceSession]="deviceSession"></app-device-session-card>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
 <app-modal-window [id]="'master-input-id'"
                   *ngIf="showUserInfo"
                   style="z-index: 100"

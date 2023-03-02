@@ -81,7 +81,7 @@ public class CommandSocketHandler extends TextWebSocketHandler {
     notifyRelated(userDetails.getId(), deviceSessionId, deviceType, WebSocketSessionEventType.CLOSED);
   }
 
-  private void notifyRelated(String userId, String eventDeviceSessionId, String deviceType, WebSocketSessionEventType eventType) {
+  private synchronized void notifyRelated(String userId, String eventDeviceSessionId, String deviceType, WebSocketSessionEventType eventType) {
     if (deviceType.equals(DeviceType.REMOTE.name())) {
       webSocketSessionHolderService.getAdminWebSocketSessionWrappers(userId)
           .stream()

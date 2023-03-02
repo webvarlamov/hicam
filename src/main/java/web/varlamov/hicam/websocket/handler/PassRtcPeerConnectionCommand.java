@@ -23,7 +23,7 @@ public class PassRtcPeerConnectionCommand implements CommandSocketTextMessageHan
   UserDetailsRepository userDetailsRepository;
 
   @Override
-  public void handleTextMessage(String rawMessage, CommandSocketTextMessage parsedMessage, WebSocketSession session) {
+  public synchronized void handleTextMessage(String rawMessage, CommandSocketTextMessage parsedMessage, WebSocketSession session) {
     logger.info("Handle new message: ");
     logger.info("   Direction: " + parsedMessage.getFrom() + " => " + parsedMessage.getTo());
     logger.info("   Mission: " + parsedMessage.getMission());
