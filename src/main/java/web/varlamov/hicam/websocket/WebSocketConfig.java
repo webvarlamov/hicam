@@ -10,10 +10,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
   @Autowired
-  CommandSocket commandSocket;
+  CommandSocketHandler commandSocketHandler;
 
   @Override
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    registry.addHandler(commandSocket, "/command-socket").setAllowedOrigins("*");
+    registry.addHandler(commandSocketHandler, "/command-socket").setAllowedOrigins("*");
   }
 }

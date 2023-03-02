@@ -1,5 +1,5 @@
 <app-header (click)="showUserInfo = true"></app-header>
-<video #video autoplay playsinline controls="false"></video>
+<video #video autoplay="autoplay" playsinline controls="false"></video>
 <app-modal-window [id]="'master-input-id'"
                   *ngIf="showUserInfo"
                   style="z-index: 100"

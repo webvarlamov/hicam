@@ -1,7 +1,7 @@
 package web.varlamov.hicam.websocket;
 
 import com.google.gson.Gson;
-import java.util.List;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +15,13 @@ import web.varlamov.hicam.entity.DeviceType;
 import web.varlamov.hicam.entity.UserDetailsImpl;
 import web.varlamov.hicam.repository.UserDetailsRepository;
 import web.varlamov.hicam.utils.HttpUtils;
+import static web.varlamov.hicam.websocket.CommandSocketTextMessage.CommandSocketTextMessagePurpose.SOME_WEB_SOCKET_SESSION_CONNECTION_CLOSED;
+import static web.varlamov.hicam.websocket.CommandSocketTextMessage.CommandSocketTextMessagePurpose.SOME_WEB_SOCKET_SESSION_CONNECTION_ESTABLISHED;
 import web.varlamov.hicam.websocket.handler.PassRtcPeerConnectionCommand;
 
 @Component
-public class CommandSocket extends TextWebSocketHandler {
-  Logger logger = LoggerFactory.getLogger(CommandSocket.class);
+public class CommandSocketHandler extends TextWebSocketHandler {
+  Logger logger = LoggerFactory.getLogger(CommandSocketHandler.class);
   Gson gson = new Gson();
 
   @Autowired
@@ -58,6 +60,8 @@ public class CommandSocket extends TextWebSocketHandler {
     WebSocketSessionWrapper webSocketSessionWrapper = new WebSocketSessionWrapper(deviceId, deviceSessionId, DeviceType.valueOf(deviceType), session);
 
     this.webSocketSessionHolderService.add(webSocketSessionWrapper, userDetails.getId());
+
+    notifyRelated(userDetails.getId(), deviceSessionId, deviceType, WebSocketSessionEventType.ESTABLISHED);
   }
 
   @Override
@@ -67,7 +71,43 @@ public class CommandSocket extends TextWebSocketHandler {
 
     String username = principal.getName();
     UserDetailsImpl userDetails = userDetailsRepository.findByUsername(username);
-    List<WebSocketSessionWrapper> webSocketSessions = webSocketSessionHolderService.commandSocketSessionMap.get(userDetails.getId());
-    webSocketSessions.removeIf(wrapper -> wrapper.getWebSocketSession().equals(session));
+
+    String deviceId = HttpUtils.getDeviceId(session.getUri());
+    String deviceType = HttpUtils.getDeviceType(session.getUri());
+    String deviceSessionId = HttpUtils.getDeviceSessionId(session.getUri());
+
+    webSocketSessionHolderService.remove(session, userDetails.getId());
+
+    notifyRelated(userDetails.getId(), deviceSessionId, deviceType, WebSocketSessionEventType.CLOSED);
+  }
+
+  private void notifyRelated(String userId, String eventDeviceSessionId, String deviceType, WebSocketSessionEventType eventType) {
+    if (deviceType.equals(DeviceType.REMOTE.name())) {
+      webSocketSessionHolderService.getAdminWebSocketSessionWrappers(userId)
+          .stream()
+          .map(WebSocketSessionWrapper::getWebSocketSession)
+          .forEach(webSocketSession -> {
+            CommandSocketTextMessage commandSocketTextMessage = new CommandSocketTextMessage();
+            if (eventType.equals(WebSocketSessionEventType.ESTABLISHED)) {
+              commandSocketTextMessage.setPurpose(SOME_WEB_SOCKET_SESSION_CONNECTION_ESTABLISHED);
+            } else if (eventType.equals(WebSocketSessionEventType.CLOSED)) {
+              commandSocketTextMessage.setPurpose(SOME_WEB_SOCKET_SESSION_CONNECTION_CLOSED);
+            }
+            commandSocketTextMessage.setData(eventDeviceSessionId);
+
+            TextMessage textMessage = new TextMessage(gson.toJson(commandSocketTextMessage));
+
+            try {
+              webSocketSession.sendMessage(textMessage);
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          });
+    }
+  }
+
+  public static enum WebSocketSessionEventType {
+    ESTABLISHED,
+    CLOSED
   }
 }

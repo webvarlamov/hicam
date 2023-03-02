@@ -1,10 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {DeviceConnectionService} from "./service/device-connection.service";
-import {combineLatest, firstValueFrom, flatMap, forkJoin, map, Observable, of, switchMap} from "rxjs";
-import {DeviceConnectionStoreService} from "./store/device-connection-store.service";
-import {PeerConnectionsStoreService} from "./store/peer-connections-store.service";
+import {combineLatest, firstValueFrom, Observable, of, switchMap} from "rxjs";
 import {CommandSocketClientService} from "./service/command-socket-client.service";
-import {PeerConnectionService} from "./service/peer-connection.service";
 import {DeviceSession} from "./model/device-session";
 import {tap} from "rxjs/operators";
 import {WebRtcService} from "./service/web-rtc.service";
