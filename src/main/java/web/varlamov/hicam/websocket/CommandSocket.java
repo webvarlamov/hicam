@@ -13,14 +13,13 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import web.varlamov.hicam.entity.DeviceType;
 import web.varlamov.hicam.entity.UserDetailsImpl;
-import web.varlamov.hicam.interceptor.DeviceConnectionHandleInterceptor;
 import web.varlamov.hicam.repository.UserDetailsRepository;
 import web.varlamov.hicam.utils.HttpUtils;
 import web.varlamov.hicam.websocket.handler.PassRtcPeerConnectionCommand;
 
 @Component
 public class CommandSocket extends TextWebSocketHandler {
-  Logger logger = LoggerFactory.getLogger(DeviceConnectionHandleInterceptor.class);
+  Logger logger = LoggerFactory.getLogger(CommandSocket.class);
   Gson gson = new Gson();
 
   @Autowired

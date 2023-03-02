@@ -3,7 +3,6 @@ package web.varlamov.hicam.rest;
 import com.google.zxing.WriterException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import web.varlamov.hicam.entity.DeviceSession;
 import web.varlamov.hicam.entity.UserDetailsImpl;
-//import web.varlamov.hicam.repository.DeviceConnectionRepository;
 import web.varlamov.hicam.repository.UserDetailsRepository;
 import web.varlamov.hicam.service.ConnectionTokenService;
 import web.varlamov.hicam.service.QRCodeService;
-import web.varlamov.hicam.websocket.WebRtcOfferHolderService;
 import web.varlamov.hicam.websocket.WebSocketSessionHolderService;
 
 @RestController
@@ -48,27 +45,6 @@ public class AdminRestController {
                 webSocketSessionWrapper.getDeviceSessionId(),
                 webSocketSessionWrapper.getDeviceType())
         ).toList();
-
-//
-//    List<WebSocketSessionWrapper> webSocketSessionWrappers = webSocketSessionHolderService.getDeviceWebSocketSessionWrappers(userDetails.getId());
-//    List<DeviceConnection> deviceConnections = Optional.ofNullable(webSocketSessionWrappers).map(
-//        wrappers -> wrappers.stream()
-//            .map(wrapper -> new DeviceConnection(
-//                wrapper.getDeviceId(),
-//                wrapper.getDeviceType(),
-//                Optional.ofNullable(webRtcOfferHolderService.getWebRtcOfferWrapper(userDetails.getId(), wrapper.getDeviceId()))
-//                    .map(WebRtcOfferWrapper::getWebRtcOffer)
-//                    .orElse(null)
-//            ))
-//            .toList()
-//    ).orElse(Collections.emptyList());
-//
-//    Map<String, DeviceConnection> result = new HashMap<>();
-//    deviceConnections.forEach(deviceConnection -> {
-//      result.put(deviceConnection.getDeviceConnectionId(), deviceConnection);
-//    });
-//
-//    return result;
   }
 
   @RequestMapping("/remove_device_connection_by_id")

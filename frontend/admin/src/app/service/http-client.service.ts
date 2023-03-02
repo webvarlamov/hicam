@@ -13,11 +13,11 @@ export class HttpClientService {
   ) { }
 
   public getDeviceId(): Observable<string> {
-    return this.http.get("/handshake_api/get_device_id", {responseType: "text"}) as Observable<string>
+    return this.http.get("/handshake_api/get_device_id?deviceType=ADMIN", {responseType: "text"}) as Observable<string>
   }
 
   public getDeviceSessionId(): Observable<string> {
-    return this.http.get("/handshake_api/get_device_session_id", {responseType: "text"}) as Observable<string>
+    return this.http.get("/handshake_api/get_device_session_id?deviceType=ADMIN", {responseType: "text"}) as Observable<string>
   }
 
   public getDeviceSessions(): Observable<DeviceSession[]> {

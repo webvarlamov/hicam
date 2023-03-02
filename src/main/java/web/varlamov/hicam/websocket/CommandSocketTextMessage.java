@@ -19,5 +19,17 @@ public class CommandSocketTextMessage {
   public static enum CommandSocketTextMessagePurpose {
     ACCEPT_OFFER,
     ACCEPT_OFFER__SUCCESS,
+
+    ADD_ICE_CANDIDATE,
+    ADD_ICE_CANDIDATE__SUCCESS,
+
+    SET_REMOTE_DESCRIPTION,
+    SET_REMOTE_DESCRIPTION__SUCCESS,
+
+    CREATE_ANSWER,
+    CREATE_ANSWER__SUCCESS,
+
+    SET_LOCAL_DESCRIPTION,
+    SET_LOCAL_DESCRIPTION__SUCCESS
   }
 }

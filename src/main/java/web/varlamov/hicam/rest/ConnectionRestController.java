@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-//import web.varlamov.hicam.repository.DeviceConnectionRepository;
 import web.varlamov.hicam.repository.UserDetailsRepository;
 
 @RestController
@@ -14,8 +13,6 @@ import web.varlamov.hicam.repository.UserDetailsRepository;
 public class ConnectionRestController {
   @Autowired
   UserDetailsRepository userDetailsRepository;
-//  @Autowired
-//  DeviceConnectionRepository deviceConnectionRepository;
 
   @GetMapping("/{token}")
   public void connect(HttpServletResponse httpServletResponse, HttpServletRequest request) {

@@ -20,20 +20,6 @@ public class WebSocketSessionHolderService {
   @Autowired
   List<WebSocketSessionHolderCallback> webSocketSessionHolderCallbackList;
 
-  public List<WebSocketSession> getAdminWebSocketSessions(String userId) {
-    return commandSocketSessionMap.get(userId).stream()
-        .filter(webSocketSessionWrapper -> webSocketSessionWrapper.getDeviceType().equals(DeviceType.ADMIN))
-        .map(WebSocketSessionWrapper::getWebSocketSession)
-        .toList();
-  }
-
-  public List<WebSocketSession> getDeviceWebSocketSessions(String userId) {
-    return commandSocketSessionMap.get(userId).stream()
-        .filter(webSocketSessionWrapper -> webSocketSessionWrapper.getDeviceType().equals(DeviceType.REMOTE))
-        .map(WebSocketSessionWrapper::getWebSocketSession)
-        .toList();
-  }
-
   public WebSocketSession getWebSocketSessionByDeviceSessionId(String userId, String deviceSessionId) {
     return Optional.ofNullable(commandSocketSessionMap.get(userId))
         .flatMap(webSocketSessionWrappers -> webSocketSessionWrappers.stream()
@@ -48,8 +34,6 @@ public class WebSocketSessionHolderService {
         .filter(webSocketSessionWrapper -> webSocketSessionWrapper.getDeviceType().equals(DeviceType.REMOTE))
         .toList();
   }
-
-
 
   public void add(WebSocketSessionWrapper webSocketSessionWrapper, String userId) {
     List<WebSocketSessionWrapper> webSocketSessions = commandSocketSessionMap.get(userId);
@@ -71,6 +55,10 @@ public class WebSocketSessionHolderService {
           + ";"
       );
     });
+  }
+
+  public void remove(WebSocketSessionWrapper webSocketSessionWrapper, String userId) {
+
   }
 }
 
