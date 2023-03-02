@@ -9,7 +9,7 @@ public class CommandSocketTextMessage {
   private CommandSocketTextMessagePurpose purpose;
   private String from;
   private String to;
-  private String data;
+  private Object data;
 
   public static enum CommandSocketTextMessageMission {
     PASS_RTC_PEER_CONNECTION_COMMAND,

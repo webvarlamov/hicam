@@ -1,6 +1,8 @@
 package web.varlamov.hicam.websocket.handler;
 
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,8 @@ import web.varlamov.hicam.websocket.WebSocketSessionHolderService;
 
 @Component
 public class PassRtcPeerConnectionCommand implements CommandSocketTextMessageHandler {
+  Logger logger = LoggerFactory.getLogger(PassRtcPeerConnectionCommand.class);
+
   @Autowired
   WebSocketSessionHolderService webSocketSessionHolderService;
   @Autowired
@@ -20,6 +24,12 @@ public class PassRtcPeerConnectionCommand implements CommandSocketTextMessageHan
 
   @Override
   public void handleTextMessage(String rawMessage, CommandSocketTextMessage parsedMessage, WebSocketSession session) {
+    logger.info("Handle new message: ");
+    logger.info("   Direction: " + parsedMessage.getFrom() + " => " + parsedMessage.getTo());
+    logger.info("   Mission: " + parsedMessage.getMission());
+    logger.info("   Purpose: " + parsedMessage.getPurpose());
+    logger.info("   Data: " + parsedMessage.getData());
+
     AbstractAuthenticationToken principal = (AbstractAuthenticationToken) session.getPrincipal();
 
     assert principal != null;

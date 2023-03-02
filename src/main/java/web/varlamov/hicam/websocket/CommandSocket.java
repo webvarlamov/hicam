@@ -16,7 +16,6 @@ import web.varlamov.hicam.entity.UserDetailsImpl;
 import web.varlamov.hicam.interceptor.DeviceConnectionHandleInterceptor;
 import web.varlamov.hicam.repository.UserDetailsRepository;
 import web.varlamov.hicam.utils.HttpUtils;
-import web.varlamov.hicam.websocket.handler.AddAnswerHandler;
 import web.varlamov.hicam.websocket.handler.PassRtcPeerConnectionCommand;
 
 @Component
@@ -30,8 +29,6 @@ public class CommandSocket extends TextWebSocketHandler {
   UserDetailsRepository userDetailsRepository;
   @Autowired
   PassRtcPeerConnectionCommand passRtcPeerConnectionCommand;
-  @Autowired
-  AddAnswerHandler addAnswerHandler;
 
   @Override
   public void handleTextMessage(WebSocketSession session, TextMessage message) {

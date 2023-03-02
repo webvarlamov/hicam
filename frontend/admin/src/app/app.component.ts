@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {DeviceConnectionService} from "./service/device-connection.service";
 import {combineLatest, firstValueFrom, flatMap, forkJoin, map, Observable, of, switchMap} from "rxjs";
 import {DeviceConnectionStoreService} from "./store/device-connection-store.service";
@@ -18,6 +18,8 @@ import {HttpClientService} from "./service/http-client.service";
 export class AppComponent implements OnInit {
   public deviceConnectionListCardsData$: Observable<{ rtcPeerConnection: RTCPeerConnection, deviceConnection: DeviceSession }[]>
   public showUserInfo: boolean;
+  @ViewChild('video', {static: true})
+  public video: ElementRef<HTMLVideoElement> | null = null;
 
   constructor(
     public commandSocketClientService: CommandSocketClientService,
@@ -27,82 +29,42 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-      const init$ = combineLatest([
-        this.httpClientService.getDeviceId(),
-        this.httpClientService.getDeviceSessionId(),
-      ]).pipe(
-        tap(([deviceId, deviceSessionId]) => {
-          console.info("New tab with deviceId=" + deviceId + "; deviceSessionId=" + deviceSessionId + ";");
-          this.commandSocketClientService.init(deviceId, deviceSessionId)
-        }),
-        switchMap(([deviceId, deviceSessionId]) => {
-          return combineLatest([
-            of(deviceSessionId),
-            this.httpClientService.getDeviceSessions()
-          ]);
-        }),
-        tap(([deviceSessionId, deviceSessions]) => {
-          console.info("Remote device sessions received: ", deviceSessions)
-        }),
-        map(([deviceSessionId, deviceSessions]) => {
-          deviceSessions.forEach(deviceSession => {
-            this.webRtcService.connect(deviceSession.deviceSessionId, deviceSessionId, null)
-              .then(rtcPeerConnection => console.info("RtcPeerConnection success:", rtcPeerConnection));
-          })
+    const init$ = combineLatest([
+      this.httpClientService.getDeviceId(),
+      this.httpClientService.getDeviceSessionId(),
+    ]).pipe(
+      tap(([deviceId, deviceSessionId]) => {
+        console.info("New tab with deviceId=" + deviceId + "; deviceSessionId=" + deviceSessionId + ";");
+        this.commandSocketClientService.init(deviceId, deviceSessionId)
+      }),
+      switchMap(([deviceId, deviceSessionId]) => {
+        return combineLatest([
+          of(deviceSessionId),
+          this.httpClientService.getDeviceSessions()
+        ]);
+      }),
+      tap(([deviceSessionId, deviceSessions]) => {
+        console.info("Remote device sessions received: ", deviceSessions)
+      }),
+      tap(([deviceSessionId, deviceSessions]) => {
+        deviceSessions.forEach(deviceSession => {
+          this.webRtcService.connect(
+            deviceSession.deviceSessionId,
+            deviceSessionId,
+            null,
+            {
+              ontrack: (event) => {
+                this.video.nativeElement.srcObject = event.streams[0];
+              }
+            }
+          ).then(rtcPeerConnection => {
+            console.info("👍 Success:", rtcPeerConnection);
+          });
         })
-      );
+      })
+    );
 
-      firstValueFrom(init$)
-        .then()
-
-    // navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(stream => {
-    //   this.webRtcService.connect("2", "1", stream).then(_void => {
-    //   })
-    // })
-    // this.deviceConnectionService.loadDeviceConnectionList()
-    //   .pipe(
-    //     tap(deviceConnections => {
-    //       this.deviceConnectionStoreService.setDeviceConnections(deviceConnections)
-    //     }),
-    //     map(deviceConnections => {
-    //       const peerConnections: { [id: string]: RTCPeerConnection } = {};
-    //       Object.keys(deviceConnections).forEach(key => {
-    //         peerConnections[key] = this.peerConnectionService.getPeerConnection()
-    //       })
-    //
-    //       this.peerConnectionsStoreService.setPeerConnections(peerConnections)
-    //
-    //       return {
-    //         deviceConnections,
-    //         peerConnections
-    //       }
-    //     }),
-    //     switchMap(connections => {
-    //       const peerConnections = connections.peerConnections;
-    //       const deviceConnections = connections.deviceConnections;
-    //       const answers: {[id: string]: RTCSessionDescriptionInit} = {};
-    //
-    //       const answerPromises = Object
-    //         .keys(peerConnections)
-    //         .map(key => {
-    //           const peerConnection = peerConnections[key];
-    //           const offer = JSON.parse(deviceConnections[key].offer);
-    //
-    //           return this.peerConnectionService.setRemoteDescriptionAndCreateAnswer(peerConnection, offer).then(answer => {
-    //             answers[key] = answer;
-    //             return true;
-    //           })
-    //         });
-    //
-    //       return combineLatest([of(answers), of(peerConnections), of(deviceConnections), forkJoin(answerPromises)])
-    //     }),
-    //     tap(latest => {
-    //       const answers = latest[0];
-    //       Object.keys(answers).forEach(key => {
-    //         this.webSocketService.sendAnswerToRemote(key, answers[key])
-    //       })
-    //     })
-    //   ).subscribe();
+    firstValueFrom(init$).then()
   }
 
   onUserInfoDecline() {
