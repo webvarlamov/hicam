@@ -73,7 +73,7 @@ export class CommandSocketClientService {
     this.commandSocket.send(JSON.stringify(command))
   }
 
-  public init(deviceId: string, deviceSessionId: string) {
+  public createWebSocketSession(deviceId: string, deviceSessionId: string) {
     this.commandSocket = new WebSocket("ws://localhost:4200/command-socket?deviceType=ADMIN&deviceId=" + deviceId + "&deviceSessionId=" + deviceSessionId);
 
     this.commandSocket.onmessage = (event) => {

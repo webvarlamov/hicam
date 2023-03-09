@@ -3,20 +3,24 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
-import { DeviceSessionCardComponent } from './component/device-connection-card/device-session-card.component';
+import { VideoElementWrapper } from './component/video-element-wrapper/video-element-wrapper.component';
 import { HeaderComponent } from './component/header/header.component';
-import {ModalWindowModuleModule} from "./modules/modal-window-module/modal-window-module.module";
+import { FooterComponent } from './component/footer/footer.component';
+import { ConnectionsWrapperComponent } from './component/connections-wrapper/connections-wrapper.component';
+import { DeviceConnectionLinkModalComponent } from './component/device-connection-link-modal/device-connection-link-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DeviceSessionCardComponent,
-    HeaderComponent
+    VideoElementWrapper,
+    HeaderComponent,
+    FooterComponent,
+    ConnectionsWrapperComponent,
+    DeviceConnectionLinkModalComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    ModalWindowModuleModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

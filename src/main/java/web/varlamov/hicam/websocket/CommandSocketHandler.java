@@ -81,7 +81,7 @@ public class CommandSocketHandler extends TextWebSocketHandler {
     notifyRelated(userDetails.getId(), deviceSessionId, deviceType, WebSocketSessionEventType.CLOSED);
   }
 
-  private synchronized void notifyRelated(String userId, String eventDeviceSessionId, String deviceType, WebSocketSessionEventType eventType) {
+  private void notifyRelated(String userId, String eventDeviceSessionId, String deviceType, WebSocketSessionEventType eventType) {
     if (deviceType.equals(DeviceType.REMOTE.name())) {
       webSocketSessionHolderService.getAdminWebSocketSessionWrappers(userId)
           .stream()
@@ -97,12 +97,33 @@ public class CommandSocketHandler extends TextWebSocketHandler {
 
             TextMessage textMessage = new TextMessage(gson.toJson(commandSocketTextMessage));
 
-            try {
-              webSocketSession.sendMessage(textMessage);
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
+            sendMessage(webSocketSession, textMessage);
           });
+    } else if (deviceType.equals(DeviceType.ADMIN.name())) {
+      webSocketSessionHolderService.getDeviceWebSocketSessionWrappers(userId)
+          .stream()
+          .map(WebSocketSessionWrapper::getWebSocketSession)
+          .forEach(webSocketSession -> {
+            CommandSocketTextMessage commandSocketTextMessage = new CommandSocketTextMessage();
+            if (eventType.equals(WebSocketSessionEventType.ESTABLISHED)) {
+              commandSocketTextMessage.setPurpose(SOME_WEB_SOCKET_SESSION_CONNECTION_ESTABLISHED);
+            } else if (eventType.equals(WebSocketSessionEventType.CLOSED)) {
+              commandSocketTextMessage.setPurpose(SOME_WEB_SOCKET_SESSION_CONNECTION_CLOSED);
+            }
+            commandSocketTextMessage.setData(eventDeviceSessionId);
+
+            TextMessage textMessage = new TextMessage(gson.toJson(commandSocketTextMessage));
+
+            sendMessage(webSocketSession, textMessage);
+          });
+    }
+  }
+
+  private synchronized void sendMessage(WebSocketSession webSocketSession, TextMessage textMessage) {
+    try {
+      webSocketSession.sendMessage(textMessage);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

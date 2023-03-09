@@ -6,13 +6,17 @@ import {DeviceSession} from "../model/device-session";
   providedIn: 'root'
 })
 export class DeviceSessionStoreService {
-  public deviceSessionList$: BehaviorSubject<DeviceSession[]> = new BehaviorSubject<DeviceSession[]>([]);
+  public deviceSessions$: BehaviorSubject<DeviceSession[]> = new BehaviorSubject<DeviceSession[]>([]);
   public selectedDeviceSession$: BehaviorSubject<DeviceSession | null> = new BehaviorSubject<DeviceSession | null>(null);
 
   constructor() { }
 
   public setDeviceSessions(deviceConnections: DeviceSession[]) {
-    this.deviceSessionList$.next(deviceConnections)
+    this.deviceSessions$.next(deviceConnections)
+  }
+
+  public getDeviceSessions(): DeviceSession[] {
+    return this.deviceSessions$.getValue();
   }
 
   public setSelectedDeviceSession(deviceConnection: DeviceSession) {

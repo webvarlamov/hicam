@@ -28,10 +28,10 @@ export class RemoteRTCPeerConnectionBuilderService {
         this.commandSocketClientService.message$.pipe(
           filter(message => message != null && message.id == uuid),
           tap(message => {
-            console.group("[RemoteRTCPeerConnection]");
-            console.info(localDeviceId + " => " + remoteDeviceId);
-            console.info("Success invoke addIceCandidate(...)");
-            console.groupEnd()
+            // console.group("[RemoteRTCPeerConnection]");
+            // console.info(localDeviceId + " => " + remoteDeviceId);
+            // console.info("Success invoke addIceCandidate(...)");
+            // console.groupEnd()
           })
         )
       ).then()
@@ -45,10 +45,10 @@ export class RemoteRTCPeerConnectionBuilderService {
         this.commandSocketClientService.message$.pipe(
           filter(message => message != null && message.id == uuid),
           tap(message => {
-            console.group("[RemoteRTCPeerConnection]");
-            console.info(localDeviceId + " => " + remoteDeviceId);
-            console.info("Success invoke setRemoteDescription(...)");
-            console.groupEnd()
+            // console.group("[RemoteRTCPeerConnection]");
+            // console.info(localDeviceId + " => " + remoteDeviceId);
+            // console.info("Success invoke setRemoteDescription(...)");
+            // console.groupEnd()
           })
         )
       ).then(() => {
@@ -66,10 +66,10 @@ export class RemoteRTCPeerConnectionBuilderService {
           map(message => message.data),
           map(answer => answer as RTCSessionDescriptionInit),
           tap(message => {
-            console.group("[RemoteRTCPeerConnection]");
-            console.info(localDeviceId + " => " + remoteDeviceId);
-            console.info("Success invoke createAnswer(...)");
-            console.groupEnd()
+            // console.group("[RemoteRTCPeerConnection]");
+            // console.info(localDeviceId + " => " + remoteDeviceId);
+            // console.info("Success invoke createAnswer(...)");
+            // console.groupEnd()
           })
         )
       );
@@ -83,10 +83,10 @@ export class RemoteRTCPeerConnectionBuilderService {
         this.commandSocketClientService.message$.pipe(
           filter(message => message != null && message.id == uuid),
           tap(message => {
-            console.group("[RemoteRTCPeerConnection]");
-            console.info(localDeviceId + " => " + remoteDeviceId);
-            console.info("Success invoke setLocalDescription(...)");
-            console.groupEnd()
+            // console.group("[RemoteRTCPeerConnection]");
+            // console.info(localDeviceId + " => " + remoteDeviceId);
+            // console.info("Success invoke setLocalDescription(...)");
+            // console.groupEnd()
           })
         )
       ).then();
@@ -100,10 +100,10 @@ export class RemoteRTCPeerConnectionBuilderService {
       ).subscribe(message => {
       let event: RTCPeerConnectionIceEvent = message.data;
 
-      console.group("[RemoteRTCPeerConnection]");
-      console.info(remoteDeviceId + " => " + localDeviceId);
-      console.info("Receive new onicecandidate event");
-      console.groupEnd()
+      // console.group("[RemoteRTCPeerConnection]");
+      // console.info(remoteDeviceId + " => " + localDeviceId);
+      // console.info("Receive new onicecandidate event");
+      // console.groupEnd()
 
       remoteRTCPeerConnection.onicecandidate(event)
     })

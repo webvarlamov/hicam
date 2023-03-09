@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {DeviceSession} from "../model/device-session";
+import {UserMineDto} from "../model/user-mine-dto";
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,9 @@ export class HttpClientService {
 
   public getTokenLink(): Observable<string> {
     return this.http.get("/admin_api/generate_token_link") as Observable<string>
+  }
+
+  public getUserInfo(): Observable<UserMineDto> {
+    return this.http.get("/user_api/mine") as Observable<UserMineDto>
   }
 }

@@ -47,11 +47,6 @@ public class AdminRestController {
         ).toList();
   }
 
-  @RequestMapping("/remove_device_connection_by_id")
-  public void removeDeviceConnectionById(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-  }
-
   @GetMapping("/generate_token_link")
   public ResponseEntity<byte[]> generate(@AuthenticationPrincipal UserDetailsImpl user) throws WriterException, IOException {
     return ResponseEntity.status(HttpStatus.OK)

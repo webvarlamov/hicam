@@ -1,42 +1,15 @@
-<app-header (click)="showUserInfo = true"></app-header>
-
-<div class="fd-grid-list fd-grid-list--mode-delete">
-  <div class="fd-container">
-    <div class="fd-row">
-      <div class="fd-col fd-col--12">
-        <div class="fd-toolbar fd-toolbar--solid">
-          <span>Device connections</span>
-        </div>
+<app-header (onConnectDeviceButtonClick)="onConnectDeviceButtonClick()"></app-header>
+<app-connections-wrapper>
+  <div content style="display: contents">
+    <ng-container *ngFor="let videoElement of videoElementsStoreService.getVideoElements()">
+      <div class="fd-col fd-col--12 fd-col-md--6 fd-col-lg--4 fd-col-xl--3">
+        <video-element-wrapper [videoElement]="videoElement"></video-element-wrapper>
       </div>
-    </div>
-
-    <div class="fd-row">
-      <ng-container *ngFor="let deviceSession of deviceSessionList$ | async;  let i = index; trackBy: trackByIdValue;">
-        <div  class="fd-col fd-col--12 fd-col-md--6 fd-col-lg--4 fd-col-xl--3">
-          <app-device-session-card [deviceSession]="deviceSession"></app-device-session-card>
-        </div>
-      </ng-container>
-    </div>
+    </ng-container>
   </div>
-</div>
-
-
-<app-modal-window [id]="'master-input-id'"
-                  *ngIf="showUserInfo"
-                  style="z-index: 100"
-                  [allowFullSize]="false"
-                  [allowMinimize]="false"
-                  [resizable]="false"
-                  [baseHeight]="'600px'"
-                  [baseWidth]="'800px'"
-                  [minWidth]="'700px'"
-                  [minHeight]="'450px'"
-                  (decline)="onUserInfoDecline()"
-                  [headerTitle]="'Настройки'"
->
-  <div modalWindowBody>
-    <span class="fd-avatar fd-avatar--xl fd-avatar--thumbnail fd-avatar--background-contain"
-          style="background-image: url('/admin_api/generate_token_link')"
-    ></span>
-  </div>
-</app-modal-window>
+</app-connections-wrapper>
+<app-footer></app-footer>
+<app-device-connection-link-modal
+  *ngIf="showDeviceConnectionModal"
+  (onDecline)="showDeviceConnectionModal = false"
+></app-device-connection-link-modal>

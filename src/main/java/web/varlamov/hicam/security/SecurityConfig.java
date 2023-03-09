@@ -1,5 +1,6 @@
 package web.varlamov.hicam.security;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -51,9 +52,14 @@ public class SecurityConfig {
     httpSecurity.csrf().disable();
 
     httpSecurity.authorizeHttpRequests(auth -> {
+      auth.requestMatchers("/public/**").permitAll();
+      auth.requestMatchers("/signin/**", "/signin_api/**").permitAll();
       auth.requestMatchers("/").permitAll();
+
+      auth.requestMatchers("/private/**", "/private/**").authenticated();
+
       auth.requestMatchers("/connect/**").authenticated();
-      auth.requestMatchers("/private/device/**", "/private/admin/**").authenticated();
+      auth.requestMatchers("/user_api/**").authenticated();
       auth.requestMatchers("/admin","/admin_api/**", "connection_token").authenticated();
       auth.requestMatchers("/device","/device/**","/device_api/**").authenticated();
       auth.requestMatchers("/handshake_api/**").authenticated();

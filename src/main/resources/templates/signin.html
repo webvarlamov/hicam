@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign in</title>
+    <link href='https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css' rel='stylesheet'>
+    <link href='https://unpkg.com/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_dark/css_variables.css' rel='stylesheet'>
+    <link href='https://unpkg.com/fundamental-styles@latest/dist/theming/sap_fiori_3_dark.css' rel='stylesheet'>
+</head>
+<body class="fd-page" style="height: 100vh;">
+    <div style="display:flex; justify-content:space-around; flex-wrap: wrap; align-items: center; height: 100%;">
+        <div style="width: 300px; height: 300px; margin: 1rem;">
+            <div class="fd-card">
+                <a class="fd-card__header">
+                    <div class="fd-card__header-text">
+                        <div class="fd-card__title-area">
+                            <div class="fd-card__title">Sign in</div>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="fd-card__content">
+                    <div class="fd-container fd-form-layout-grid-container fd-form-layout-grid-container--vertical fd-form-group" style="max-width:600px;">
+                        <div class="fd-row fd-form-item">
+                            <div class="fd-col">
+                                <label class="fd-form-label" for="username">Username:</label>
+                            </div>
+                            <div class="fd-col">
+                                <input class="fd-input" type="text" id="username" placeholder="Username">
+                            </div>
+                        </div>
+                        <div class="fd-row fd-form-item">
+                            <div class="fd-col">
+                                <label class="fd-form-label" for="password">Password:</label>
+                            </div>
+                            <div class="fd-col">
+                                <input class="fd-input" type="text" id="password" placeholder="Password">
+                            </div>
+                        </div>
+                        <div id="response-status" class="fd-row fd-form-item">
+                            <div id="response-status-success"
+                                 class="fd-message-strip fd-message-strip--success fd-message-strip--no-icon fd-message-strip--dismissible"
+                                 style="width: 100%; display: none;"
+                            >
+                                ⭐ Signin success!
+                            </div>
+                            <div id="response-status-error"
+                                 class="fd-message-strip fd-message-strip--error fd-message-strip--no-icon fd-message-strip--dismissible"
+                                 style="width: 100%; display: none;"
+                            >
+                                😞 Signin fail! User exist
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fd-bar fd-bar--footer fd-card__bar-footer">
+                    <div class="fd-bar__right">
+                        <div class="fd-bar__element">
+                            <button class="fd-button fd-button--transparent fd-button--compact" onclick="onSigninButtonClick()">Signin</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script th:src="@{/public/signin/script.js}"></script>
+
