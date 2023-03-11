@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>Admin</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css" rel="stylesheet">
+    <link href="https://unpkg.com/@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3_dark/css_variables.css" rel="stylesheet">
+    <link href="https://unpkg.com/fundamental-styles@latest/dist/theming/sap_fiori_3_dark.css" rel="stylesheet">
+    <style>@charset "UTF-8"</style>
+    <link rel="stylesheet" th:style="@{/private/admin/styles.css}" media="print" onload="this.media='all'">
 </head>
-<body>
-    <video id="localVideo" autoplay playsinline controls="false"></video>
-    <video id="remoteVideo" autoplay playsinline controls="false"></video>
+<body class="fd-page" style="height: 100vh">
+<app-root></app-root>
+<script th:src="@{/private/admin/runtime.js}" type="module"></script>
+<script th:src="@{/private/admin/polyfills.js}" type="module"></script>
+<script th:src="@{/private/admin/main.js}" type="module"></script>
 </body>
 </html>
-<script th:src="@{/private/admin/script.js}"></script>

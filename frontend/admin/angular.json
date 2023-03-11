@@ -29,6 +29,7 @@
           },
           "configurations": {
             "production": {
+              "outputPath": "../../src/main/resources/static/private/admin",
               "budgets": [
                 {
                   "type": "initial",
@@ -47,7 +48,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "none"
             },
             "development": {
               "buildOptimizer": false,
