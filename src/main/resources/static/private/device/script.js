@@ -24,6 +24,22 @@ function getDeviceSessionId() {
         .then(response => response.text())
 }
 
+function getProtocol() {
+    if (location.protocol === "https:") {
+        return "wss:"
+    } else {
+        return "ws:"
+    }
+}
+
+function getPort() {
+    if(location.port.length !== 0) {
+        return ":8080"
+    } else {
+        return ""
+    }
+}
+
 function createNewRTCPeerConnection() {
     return navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(stream => {
         let peerConnection = new RTCPeerConnection(iceConfig);
@@ -203,6 +219,6 @@ Promise.all([
     currentDeviceId = deviceId;
     currentDeviceSessionId = deviceSessionId;
 
-    commandSocket = new WebSocket("ws://localhost:8080/command-socket?deviceType=REMOTE&deviceId=" + deviceId + "&deviceSessionId=" + deviceSessionId);
+    commandSocket = new WebSocket(`${getProtocol()}//${location.hostname}${this.getPort()}/` + "command-socket?deviceType=REMOTE&deviceId=" + deviceId + "&deviceSessionId=" + deviceSessionId);
     commandSocket.onmessage = onCommandSocketMessage;
 })

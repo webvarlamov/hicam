@@ -1,6 +1,7 @@
 package web.varlamov.hicam.rest;
 
 import com.google.zxing.WriterException;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,12 +49,12 @@ public class AdminRestController {
   }
 
   @GetMapping("/generate_token_link")
-  public ResponseEntity<byte[]> generate(@AuthenticationPrincipal UserDetailsImpl user) throws WriterException, IOException {
+  public ResponseEntity<byte[]> generate(@AuthenticationPrincipal UserDetailsImpl user, HttpServletRequest request) throws WriterException, IOException {
     return ResponseEntity.status(HttpStatus.OK)
         .header(HttpHeaders.CONTENT_DISPOSITION, "filename=\"image.png\"")
         .contentType(MediaType.IMAGE_PNG)
         .body(qrCodeService.getQRCodeByteArray(
-            connectionTokenService.getConnectionTokenAsLinkFor(user)
+            connectionTokenService.getConnectionTokenAsLinkFor(user, request)
         ));
   }
 }
