@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+
+  hicam_db:
+    image: postgres
+    restart: always
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_PASSWORD: hicam
+      POSTGRES_DB: hicam
+      POSTGRES_USER: hicam
+      POSTGRESS_ROLE: hicam
+
+  hicam:
+    image: cr.yandex/crp3g2ebtfsh3buhv6q0/hicam:0.0.1
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      DATASOURCE_URL: hicam_db
+      DATASOURCE_USERNAME: hicam
+      DATASOURCE_PASSWORD: hicam
+

@@ -78,10 +78,25 @@
             <artifactId>gson</artifactId>
             <version>2.8.9</version>
         </dependency>
-
     </dependencies>
 
+	<profiles>
+		<profile>
+			<id>docker</id>
+			<properties>
+				<activatedProperties>docker</activatedProperties>
+			</properties>
+		</profile>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<activatedProperties>dev</activatedProperties>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
+		<finalName>hicam</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

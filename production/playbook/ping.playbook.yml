@@ -1,0 +1,7 @@
+---
+- name: Ping inventory
+  hosts: hicam
+
+  tasks:
+  - name: "Ping"
+    ansible.builtin.ping:
