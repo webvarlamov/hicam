@@ -8,12 +8,10 @@ import web.varlamov.hicam.entity.UserDetailsImpl;
 public class ConnectionTokenService {
   public String getConnectionTokenAsLinkFor(UserDetailsImpl userDetails, HttpServletRequest request) {
     String token = userDetails.getUsername();
-    return "http://localhost:8080/connect/" + token;
+    String protocol = request.isSecure() ? "https://": "http://";
+    String host = request.getServerName();
+    String port = host.equals("localhost") ? ":" + request.getServerPort() : "";
+    return protocol + host + port + "/connect/" + token;
   }
 }
 
-//    String protocol = request.isSecure() ? "https://": "http://";
-//    String host = request.getServerName();
-//    int port = request.getServerPort();
-//
-//    return protocol + host;

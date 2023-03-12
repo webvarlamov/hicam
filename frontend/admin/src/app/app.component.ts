@@ -80,8 +80,13 @@ export class AppComponent implements AfterViewInit {
                 this.videoElementsStoreService.getVideoElementId(remoteDeviceSession.deviceSessionId)
               ) as HTMLVideoElement;
 
+              let isPlaying = false;
               video.srcObject = event.streams[0];
-              video.play().then();
+              video.onpause = (event) => { isPlaying = false }
+              video.onplay = (event) => { isPlaying = true }
+              if (!isPlaying) {
+                video.play().then()
+              }
             }
           }
 
