@@ -74,11 +74,31 @@ export class CommandSocketClientService {
   }
 
   public createWebSocketSession(deviceId: string, deviceSessionId: string) {
-    this.commandSocket = new WebSocket("ws://localhost:4200/command-socket?deviceType=ADMIN&deviceId=" + deviceId + "&deviceSessionId=" + deviceSessionId);
+    // this.commandSocket = new WebSocket("ws://localhost:4200/command-socket?deviceType=ADMIN&deviceId=" + deviceId + "&deviceSessionId=" + deviceSessionId);
+    this.commandSocket = new WebSocket(`${this.getProtocol()}//${location.hostname}${this.getPort()}/` +
+        "command-socket?deviceType=ADMIN&deviceId=" + deviceId +
+        "&deviceSessionId=" + deviceSessionId
+    );
 
     this.commandSocket.onmessage = (event) => {
       const message: CommandSocketTextMessage = JSON.parse(event.data);
       this.message$.next(message);
+    }
+  }
+
+  private getProtocol(): string {
+    if (location.protocol === 'https:') {
+      return 'wss:'
+    } else {
+      return 'ws:'
+    }
+  }
+
+  private getPort(): string {
+    if(location.port.length != 0) {
+      return `:8080`
+    } else {
+      return ''
     }
   }
 }

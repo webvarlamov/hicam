@@ -52,6 +52,7 @@ public class SecurityConfig {
     httpSecurity.csrf().disable();
 
     httpSecurity.authorizeHttpRequests(auth -> {
+      auth.requestMatchers("/.well-known/**").permitAll();
       auth.requestMatchers("/public/**").permitAll();
       auth.requestMatchers("/signin/**", "/signin_api/**").permitAll();
       auth.requestMatchers("/").permitAll();
