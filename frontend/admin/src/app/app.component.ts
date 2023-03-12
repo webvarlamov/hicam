@@ -48,10 +48,13 @@ export class AppComponent implements AfterViewInit {
         localStorage.setItem("deviceId", deviceId);
         localStorage.setItem("deviceSessionId", deviceSessionId);
       }),
-      tap(([deviceId, deviceSessionId]) => {
-        this.commandSocketClientService.createWebSocketSession(deviceId, deviceSessionId);
-      }),
       switchMap(([deviceId, deviceSessionId]) => {
+        return combineLatest([
+            of(deviceSessionId),
+            this.commandSocketClientService.createWebSocketSession(deviceId, deviceSessionId)
+        ])
+      }),
+      switchMap(([deviceSessionId, onOpen]) => {
         return combineLatest([
           of(deviceSessionId),
           this.httpClientService.getDeviceSessions()

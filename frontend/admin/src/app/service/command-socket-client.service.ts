@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, firstValueFrom, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -73,8 +73,7 @@ export class CommandSocketClientService {
     this.commandSocket.send(JSON.stringify(command))
   }
 
-  public createWebSocketSession(deviceId: string, deviceSessionId: string) {
-    // this.commandSocket = new WebSocket("ws://localhost:4200/command-socket?deviceType=ADMIN&deviceId=" + deviceId + "&deviceSessionId=" + deviceSessionId);
+  public createWebSocketSession(deviceId: string, deviceSessionId: string): Promise<void> {
     this.commandSocket = new WebSocket(`${this.getProtocol()}//${location.hostname}${this.getPort()}/` +
         "command-socket?deviceType=ADMIN&deviceId=" + deviceId +
         "&deviceSessionId=" + deviceSessionId
@@ -84,6 +83,14 @@ export class CommandSocketClientService {
       const message: CommandSocketTextMessage = JSON.parse(event.data);
       this.message$.next(message);
     }
+
+    const onOpenSubject = new Subject<void>();
+    this.commandSocket.onopen = (event) => {
+      console.info("Command socket connection is OPEN:", event)
+      onOpenSubject.next();
+    }
+
+    return firstValueFrom(onOpenSubject)
   }
 
   private getProtocol(): string {
@@ -96,7 +103,7 @@ export class CommandSocketClientService {
 
   private getPort(): string {
     if(location.port.length != 0) {
-      return `:8080`
+      return ':' + location.port
     } else {
       return ''
     }
