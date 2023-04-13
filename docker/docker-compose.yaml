@@ -23,3 +23,8 @@ services:
       DATASOURCE_USERNAME: hicam
       DATASOURCE_PASSWORD: hicam
 
+  coturn:
+    image: instrumentisto/coturn
+    ports:
+      - "3478:3478"
+      - "49160-49200:49160-49200/udp"
