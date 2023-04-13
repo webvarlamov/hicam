@@ -10,7 +10,7 @@ import {VideoElementsStoreService} from "../store/video-elements-store.service";
 export class WebRtcConnectionService {
   private iceConfig = {
     iceServers: [
-      {urls: 'turn:158.160.52.146:3478?transport=udp'}
+      {urls: 'turn:158.160.52.146:3478?transport=udp', username: 'user', credentials: 'password'}
     ]
   }
 
